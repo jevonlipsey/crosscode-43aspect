@@ -4,7 +4,7 @@ usage: build.py <variant>...   variants: diag, flagsB, flagsC, 43-640, 43-568, 4
  diag    node-webkit.html with the frame-timing probe (needs tools/cc-diag.js deployed to assets/)
  flagsB  package.json + --disable-accelerated-2d-canvas
  flagsC  package.json with --disable-gpu instead of --in-process-gpu
- 43-*    REMOVED: use tools/patch43.py
+ 43-*    REMOVED: use tools/variants43.py
 """
 import sys, os, re
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,4 +19,4 @@ for v in sys.argv[1:]:
     elif v == 'flagsC':
         w('package.C.json', o('package.json').replace('--in-process-gpu ', '--disable-gpu '))
     elif v.startswith('43-'):
-        sys.exit('43-* variants moved to tools/patch43.py (exact-match, count-checked, writes out/43-<v>/); verify with tools/verify43.py')
+        sys.exit('43-* variants moved to tools/variants43.py (exact-match, count-checked, writes out/43-<v>/); verify with tools/verify43.py')

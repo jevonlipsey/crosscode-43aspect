@@ -12,7 +12,7 @@ Also prints the game's own FIT-mode scaling math for a 1280x960 window (copied f
 import glob, hashlib, json, os, re, subprocess, sys
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, f'{R}/tools')
-import patch43
+import variants43 as patch43
 sha = lambda b: hashlib.sha256(b).hexdigest()
 fails = []
 def fail(m): fails.append(m); print('  FAIL', m)
@@ -34,7 +34,7 @@ for name, h in patch43.PRISTINE.items():
     if h not in local: fail(f'CLAUDE.local.md does not record the pristine sha256 for {name} ({h[:12]}...)')
 
 variants = sys.argv[1:] or sorted(os.path.basename(d)[3:] for d in glob.glob(f'{R}/out/43-*') if os.path.isdir(d))
-if not variants: sys.exit('nothing to verify: run tools/patch43.py first')
+if not variants: sys.exit('nothing to verify: run tools/variants43.py first')
 for v in variants:
     print(f'== 43-{v}')
     W, H = patch43.SIZES[v]

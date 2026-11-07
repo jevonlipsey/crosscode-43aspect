@@ -8,7 +8,7 @@ fails loudly instead of guessing.
   steamnative.py html43    IN OUT [W H]           node-webkit.html: IG_WIDTH 568 -> W, IG_HEIGHT 320 -> H (default 480 360)
   steamnative.py package   IN OUT [shim]          package.json for the native arm64 runtime (from the depot's own one)
 """
-import json, re, sys
+import json, os, re, sys
 
 TOKEN = re.compile(r'\s*(?:"((?:[^"\\]|\\.)*)"|([{}]))')
 
@@ -92,6 +92,13 @@ def cmd_nosteam(src, dst, appid, state):
 
 def cmd_html43(src, dst, w='480', h='360'):
     b = open(src, 'rb').read()
+    if (w, h) == ('480', '360'):  # the shipped patch (tools/patch43.py): exact input hash, verified output
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import patch43
+        try: out = patch43.patch_bytes(b)
+        except patch43.Refused as e: die('%s: %s' % (src, e))
+        open(dst, 'wb').write(out)
+        return
     for old, new in ((b'var IG_WIDTH = 568;', b'var IG_WIDTH = %d;' % int(w)), (b'var IG_HEIGHT = 320;', b'var IG_HEIGHT = %d;' % int(h))):
         c = b.count(old)
         if c != 1: die('%s: %r found %dx, expected 1x (not a pristine node-webkit.html?)' % (src, old, c))

@@ -51,3 +51,10 @@ CLAUDE.local.md
 analysis/
 out/
 runs/
+
+# patcher backups/temp files, screenshot test output, test captures
+*.cc43-backup
+*.cc43-tmp
+verify/
+*.mp4
+*.json.bak

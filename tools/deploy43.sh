@@ -45,7 +45,7 @@ MODE=deploy; V=${1:-}
 if [ $MODE = deploy ]; then
   [ -n "$V" ] || die "usage: deploy43.sh <640|568|480> | --rollback | --status"
   [ "$V" = 427 ] && [ -z "${FORCE_BROKEN:-}" ] && die "427 is known broken (menus overlap/clip). FORCE_BROKEN=1 to override."
-  OUT=$R/out/43-$V; [ -d "$OUT" ] || die "$OUT missing: run tools/patch43.py $V"
+  OUT=$R/out/43-$V; [ -d "$OUT" ] || die "$OUT missing: run tools/variants43.py $V"
   python3 "$R/tools/verify43.py" "$V" >/dev/null || die "verify43.py failed for $V"
 fi
 adb -s "$S" get-state >/dev/null 2>&1 || die "no adb device $S (is the Nova plugged in?)"
