@@ -1,0 +1,12 @@
+#!/bin/bash
+# CrossCode, native arm64 (nova-43aspect, "shim" form of tools/steam-native.sh). Steam runs this file as the game's
+# Linux executable; it starts the arm64 NW.js beside it (nw) on this folder, with the flags Chromium needs inside
+# DroidDeck's proot on the command line, where Chromium is sure to see them. Steam's --in-process-gpu is dropped (the
+# native build was proven with a separate GPU process). Everything else Steam passes is handed on.
+here=$(cd "$(dirname "$0")" && pwd)
+keep=()
+for a in "$@"; do [ "$a" = --in-process-gpu ] || keep+=("$a"); done
+cd "$here" || exit 2
+exec "$here/nw" --no-sandbox --disable-dev-shm-usage --autoplay-policy=no-user-gesture-required --ignore-gpu-blocklist \
+  --disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows \
+  --ozone-platform=x11 "$here" "${keep[@]}"

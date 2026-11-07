@@ -1,6 +1,6 @@
 import json,sys,statistics as st,collections
 d=json.load(open(sys.argv[1]))
-for k in('glRenderer','inner','canvas','sys','display'):print(k,d.get(k))
+for k in('glRenderer','inner','canvas','sys','display','at_start','at_end'):print(k,d.get(k))
 def rep(n,x):
     if not x:return
     s=sorted(x);print('%-10s n=%d mean=%.1f med=%.1f p95=%.1f p99=%.1f max=%.1f sd=%.1f'%(n,len(x),st.mean(x),s[len(s)//2],s[int(len(s)*.95)],s[int(len(s)*.99)],s[-1],st.pstdev(x)))

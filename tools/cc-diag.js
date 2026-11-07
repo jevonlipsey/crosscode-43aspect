@@ -9,6 +9,7 @@
   info.ua=navigator.userAgent; info.dpr=window.devicePixelRatio; info.inner=[innerWidth,innerHeight];
   info.screen=[screen.width,screen.height]; info.argv=(typeof nw!=='undefined'&&nw.App.argv)||null;
   info.cmd=process.argv; info.display=window.IG_SCREEN_MODE;
+  function snap(k){try{info[k]={map:ig.game.mapName,loading:!!ig.loading,paused:!!ig.game.paused,ents:ig.game.entities.length,t:Math.round(performance.now())}}catch(x){info[k]=String(x)}}
   function save(){
     try{
       var d=[];for(var i=1;i<N.length;i++)d.push(N[i]-N[i-1]);
@@ -19,7 +20,7 @@
     }catch(x){fs.writeFileSync('cc-diag-err.txt',String(x))}
   }
   function loop(t){
-    if(!started)started=t;
+    if(!started){started=t;snap('at_start')}
     N.push(t);
     if(!wrapped&&window.ig&&ig.system&&ig.system.delegate){
       wrapped=true; var d=ig.system.delegate, r=d.run;
@@ -30,7 +31,7 @@
           g.draw=function(){var s=performance.now();dr.apply(this,arguments);D.push(performance.now()-s)};}
         var s=performance.now(); r.apply(this,arguments); W.push(performance.now()-s)};
     }
-    if(t-started<DUR)requestAnimationFrame(loop); else save();
+    if(t-started<DUR)requestAnimationFrame(loop); else {snap('at_end');save();}
   }
   setTimeout(function(){requestAnimationFrame(loop)},60000);
 })();

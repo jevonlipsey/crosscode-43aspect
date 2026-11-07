@@ -4,7 +4,7 @@ usage: build.py <variant>...   variants: diag, flagsB, flagsC, 43-640, 43-568, 4
  diag    node-webkit.html with the frame-timing probe (needs tools/cc-diag.js deployed to assets/)
  flagsB  package.json + --disable-accelerated-2d-canvas
  flagsC  package.json with --disable-gpu instead of --in-process-gpu
- 43-*    node-webkit.html with IG_WIDTH/IG_HEIGHT set for 4:3 (640x480 = exact 2x, 568x426, 427x320 = exact 3x)
+ 43-*    REMOVED: use tools/patch43.py
 """
 import sys, os, re
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -19,7 +19,4 @@ for v in sys.argv[1:]:
     elif v == 'flagsC':
         w('package.C.json', o('package.json').replace('--in-process-gpu ', '--disable-gpu '))
     elif v.startswith('43-'):
-        W, H = {'640': (640, 480), '568': (568, 426), '427': (427, 320)}[v[3:]]
-        s = o('node-webkit.html')
-        s = s.replace('var IG_WIDTH = 568;', f'var IG_WIDTH = {W};').replace('var IG_HEIGHT = 320;', f'var IG_HEIGHT = {H};')
-        w(f'node-webkit.{v}.html', s)
+        sys.exit('43-* variants moved to tools/patch43.py (exact-match, count-checked, writes out/43-<v>/); verify with tools/verify43.py')
