@@ -80,7 +80,7 @@ These tests need the original files in `original/` (gitignored, never committed)
 ## Limits
 
 - **Steam build only.** Other stores, or a changed `node-webkit.html`, are refused until the patcher knows that file. The Linux depot's copy has not been hashed yet. If it differs, the patcher refuses it and says so.
-- **Frame pacing is not part of this patch.** Under Proton on a 120 Hz screen, the game's frames land 1, 2 or 3 refreshes apart. A simple 60 fps gate was tried (`tools/cc-pace.js`, simulated in `tools/test-pace.mjs`) and does not fix it, so it is not shipped.
+- **Frame pacing is not part of this patch.** On an ARM handheld, the native arm64 NW.js build runs the game smoothly with this same file. Under Proton on a 120 Hz screen, frames can land unevenly; a simple 60 fps gate (`tools/cc-pace.js`) did not help there, so it is not shipped.
 - `tools/` also holds the development and device scripts (frame-timing probe, Nova deploy and run scripts, native arm64 launcher). You don't need them to use the patch.
 
 ## AI disclosure
